@@ -19,7 +19,7 @@ app.UseHttpsRedirection();
 app.MapControllers();
 
 
-app.MapGet("/weatherforecast", () =>
+app.MapGet("api/animal", () =>
     {
     })
     .WithName("GetWeatherForecast")
