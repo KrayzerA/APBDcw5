@@ -27,40 +27,25 @@ var visits = new List<Visit>()
     new Visit
     {
         Data = DateTime.Today,
-        Animal = new Animal
-        {
-            Id = 2,
-            Imie = "Puszok",
-            Kategoria = "kot",
-            Masa = 3.95,
-            KolorSiersci = "Bialy"
-        },
+        AnimalId = 1,
         Cena = 5.99,
         Opis = "opis"
     }
 };
 
-// app.MapGet("api/visits", () => Results.Ok(visits))
-//     .WithName("GetVisits")
-//     .WithOpenApi();
+app.MapGet("api/visits", () => Results.Ok(visits))
+    .WithName("GetVisits")
+    .WithOpenApi();
 
-// app.MapGet("api/visits/{animalId:int}", (int animalId) =>
-//     {
-//         var result = visits.FindAll(visit => visit.Animal.Id == animalId);
-//         if (result.Count == 0) return Results.NotFound();
-//         return Results.Ok(result);
-//     })
-//     .WithName("GetVisitsByAnimalId")
-//     .WithOpenApi();
-
-app.MapGet("api/visits", ([FromBody]Animal animal) =>
+app.MapGet("api/visits/{animalId:int}", (int animalId) =>
     {
-        var result = visits.FindAll(visit => visit.Animal == animal);
+        var result = visits.FindAll(visit => visit.AnimalId == animalId);
         if (result.Count == 0) return Results.NotFound();
         return Results.Ok(result);
     })
-    .WithName("GetVisitsByAnimal")
+    .WithName("GetVisitsByAnimalId")
     .WithOpenApi();
+
 
 app.MapPost("api/visits", (Visit visit) =>
     {

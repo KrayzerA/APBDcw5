@@ -43,7 +43,6 @@ public class AnimalDb : IAnimalDb
     public Animal? GetAnimalDetails(int id)
     {
         return _animals.FirstOrDefault(animal => animal.Id == id);
-        ;
     }
 
     public Animal? AddAnimal(Animal animal)
