@@ -1,3 +1,5 @@
+using cw5;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
+builder.Services.AddSingleton<IAnimalDb, AnimalDb>();
 
 var app = builder.Build();
 
@@ -18,16 +21,46 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.MapControllers();
 
-
-app.MapGet("api/animal", () =>
+var visits = new List<Visit>()
+{
+    new Visit
     {
+        Data = DateTime.Today,
+        Animal = new Animal
+        {
+            Id = 2,
+            Imie = "Puszok",
+            Kategoria = "kot",
+            Masa = 3.95,
+            KolorSiersci = "Bialy"
+        },
+        Cena = 5.99,
+        Opis = "opis"
+    }
+};
+
+app.MapGet("api/visits", () =>
+    {
+        return Results.Ok(visits);
     })
-    .WithName("GetWeatherForecast")
+    .WithName("GetVisits")
+    .WithOpenApi();
+
+app.MapGet("api/visits/{id:int}", (int id) =>
+    {
+        var result = visits.FindAll(visit => visit.Animal.Id == id);
+        if (result.Count == 0) return Results.NotFound();
+        return Results.Ok(result);
+    })
+    .WithName("GetVisitsByAnimalId")
+    .WithOpenApi();
+
+app.MapPost("api/visits", (Visit visit) =>
+    {
+        visits.Add(visit);
+        return Results.NoContent();
+    })
+    .WithName("CreateVisit")
     .WithOpenApi();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
