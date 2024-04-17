@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace cw5;
 
 [ApiController]
-[Route("api/animal")]
+[Route("api/animals")]
 public class AnimalController : ControllerBase
 {
     private IAnimalDb _animalDb;
@@ -35,7 +35,7 @@ public class AnimalController : ControllerBase
     }
 
     [HttpPut("{id:int}")]
-    public IActionResult UpdateAnimal(int id, Animal animal)
+    public IActionResult ReplaceAnimal(int id, Animal animal)
     {
         if (_animalDb.DeleteAnimal(id) is null) return NotFound();
         _animalDb.AddAnimal(animal);
